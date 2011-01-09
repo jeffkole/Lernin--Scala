@@ -1,0 +1,11 @@
+Things to implement to practice:
+
+* divide without /
+* fibonacci, iterative and recursive, try using tail recursion
+* Codility problem: given an array of ints, find the smallest index that makes a subset that includes all values in the array
+* reverse a linked list
+* different sorting algorithms
+* do something with the time tracking file I'm keeping at work
+* benchmarking framework?
+* logging framework
+* HandlerSocket implementation
