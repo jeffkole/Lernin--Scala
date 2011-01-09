@@ -1,6 +1,6 @@
 Things to implement to practice:
 
-* divide without /
+* divide without / (DONE)
 * fibonacci, iterative and recursive, try using tail recursion (DONE)
 * Codility problem: given an array of ints, find the smallest index that makes a subset that includes all values in the array
 * reverse a linked list
