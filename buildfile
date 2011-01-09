@@ -5,6 +5,9 @@ VERSION_NUMBER = "1.0.0"
 GROUP = "lernin_scala"
 COPYRIGHT = ""
 
+# Tell buildr we want to compile Scala
+require 'buildr/scala'
+
 # Specify Maven 2.0 remote repositories here, like this:
 repositories.remote << "http://www.ibiblio.org/maven2/"
 
