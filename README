@@ -5,7 +5,7 @@ Things to implement to practice:
 * Codility problem: given an array of ints, find the smallest index that makes a subset that includes all values in the array
 * reverse a linked list
 * different sorting algorithms
-* do something with the time tracking file I'm keeping at work
+* do something with the time tracking file I'm keeping at work (DONE)
 * benchmarking framework?
 * logging framework
 * HandlerSocket implementation
