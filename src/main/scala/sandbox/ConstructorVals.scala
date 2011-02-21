@@ -18,4 +18,6 @@ class PremutateContainer(private val nameEntry: String) {
 class PremutateContainer2(nameEntry: String) {
   val name = nameEntry(0).toString
   def originalName = nameEntry
+  // LERNIN: nameEntry is a private val, so it is immutable
+//  def changeName(newName: String) = nameEntry = newName
 }

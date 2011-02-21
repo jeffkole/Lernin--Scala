@@ -9,3 +9,8 @@ Things to implement to practice:
 * benchmarking framework?
 * logging framework
 * HandlerSocket implementation
+
+Things I Have Learned:
+* Always explicitly declaring return value is a good pattern, even if it is unnecessary.
+* Think about Options as a List that contains either one value (a Some) or no values (a None); then operate on Option using flatMap, filter, etc.
+* Constructor arguments with no 'val' or 'var' declaration become private values.
