@@ -48,29 +48,9 @@ class EchoClient(hostname: String, port: Int) {
       val echo = readLine
       printf("read from line '%s'%n", echo)
 
-      val socket = new Socket(hostname, port)
-      val input = new DataInputStream(new BufferedInputStream(socket.getInputStream))
-      val output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream))
-      output.writeChars(echo)
-      output.flush
-
-      val contents = new ByteArrayOutputStream
-
-      val buffer = new Array[Byte](8 * 1024)
-      var read = -1
-      do {
-        printf("reading...%n")
-        read = input.read(buffer)
-        printf("read %d bytes: '%s'%n", read, new String(buffer))
-        contents.write(buffer, 0, read)
-        if (read < buffer.size) { read = -1 }
-      } while (read > 0)
-
-      contents.close
-      printf("ECHO: %s%n", contents.toString)
-
-      output.close
-      input.close
+      val socket = new StringSocket(hostname, port, Array[Byte]('\n'.asInstanceOf[Byte]))
+      socket.send(echo)
+      printf("ECHO: %s%n", socket.receive)
       socket.close
     }
   }
