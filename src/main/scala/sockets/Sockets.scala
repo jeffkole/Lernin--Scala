@@ -4,7 +4,7 @@ import java.io._
 import java.net.Socket
 
 // LERNIN: I would have liked msgDelimiter to be of type T, but it results in a compilation error when declared that way
-abstract class AbstractSocket(hostname: String, port: Int, msgDelimiter: Array[Byte]) {
+abstract class AbstractSocket(hostname: String, port: Int, msgDelimiter: Byte) {
   type T
 
   val socket = new Socket(hostname, port)
@@ -20,12 +20,18 @@ abstract class AbstractSocket(hostname: String, port: Int, msgDelimiter: Array[B
   def receive: T = {
     val contents = new ByteArrayOutputStream
     val buffer = new Array[Byte](8 * 1024)
+    var done = false
     var read = -1
     do {
       read = input.read(buffer)
-      contents.write(buffer, 0, read)
-      // TODO: check for msgDelimiter at end of message
-    } while (read > 0 && read >= buffer.size)
+      if (read > 0) {
+        if (buffer(read-1) == msgDelimiter) {
+          read = read - 1
+          done = true
+        }
+        contents.write(buffer, 0, read)
+      }
+    } while (!done && read > 0 && read >= buffer.size)
     contents.close
     fromBytes(contents.toByteArray)
   }
@@ -40,14 +46,14 @@ abstract class AbstractSocket(hostname: String, port: Int, msgDelimiter: Array[B
   protected[this] def toBytes(data: T): Array[Byte]
 }
 
-class SimpleSocket(hostname: String, port: Int, msgDelimiter: Array[Byte]) extends AbstractSocket(hostname, port, msgDelimiter) {
+class SimpleSocket(hostname: String, port: Int, msgDelimiter: Byte) extends AbstractSocket(hostname, port, msgDelimiter) {
   type T = Array[Byte]
 
   override def fromBytes(data: Array[Byte]): Array[Byte] = data
   override def toBytes(data: Array[Byte]): Array[Byte] = data
 }
 
-class StringSocket(hostname: String, port: Int, msgDelimiter: Array[Byte]) extends AbstractSocket(hostname, port, msgDelimiter) {
+class StringSocket(hostname: String, port: Int, msgDelimiter: Byte) extends AbstractSocket(hostname, port, msgDelimiter) {
   type T = String
 
   override def fromBytes(data: Array[Byte]): String = new String(data, "UTF-8")

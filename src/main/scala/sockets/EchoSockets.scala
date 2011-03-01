@@ -11,22 +11,25 @@ class EchoServer(port: Int) {
       val input = new DataInputStream(new BufferedInputStream(socket.getInputStream))
       val output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream))
 
-      val contents = new ByteArrayOutputStream
-
-      val buffer = new Array[Byte](8 * 1024)
-      var read = -1
-      do {
-        read = input.read(buffer)
-        printf("read %d bytes: '%s'%n", read, new String(buffer))
-        contents.write(buffer, 0, read)
-        printf("writing '%s'%n", new String(buffer))
-        output.write(buffer, 0, read)
-        output.flush
-        if (read < buffer.size) { read = -1 }
-      } while (read > 0)
-
-      contents.close
-      printf("read in total '%s'%n", contents.toString)
+      var run = true
+      while (run) {
+        val contents = new ByteArrayOutputStream
+        val buffer = new Array[Byte](8 * 1024)
+        var read = -1
+        do {
+          read = input.read(buffer)
+          if (read > 0) {
+            printf("read %d bytes: '%s'%n", read, new String(buffer))
+            contents.write(buffer, 0, read)
+            printf("writing '%s'%n", new String(buffer))
+            output.write(buffer, 0, read)
+            output.flush
+          }
+        } while (read > 0 && read >= buffer.size)
+        contents.close
+        printf("read in total '%s'%n", contents.toString)
+        if (read <= 0) { run = false }
+      }
 
       output.close
       input.close
@@ -43,16 +46,16 @@ object EchoServer {
 
 class EchoClient(hostname: String, port: Int) {
   def run: Unit = {
+    val socket = new StringSocket(hostname, port, '\n'.asInstanceOf[Byte])
     while (true) {
       printf("> ")
       val echo = readLine
       printf("read from line '%s'%n", echo)
 
-      val socket = new StringSocket(hostname, port, Array[Byte]('\n'.asInstanceOf[Byte]))
       socket.send(echo)
       printf("ECHO: %s%n", socket.receive)
-      socket.close
     }
+    socket.close
   }
 }
 
