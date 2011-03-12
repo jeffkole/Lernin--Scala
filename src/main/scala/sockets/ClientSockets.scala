@@ -5,12 +5,13 @@ import java.net.Socket
 // LERNIN: The type used for these methods is defined by the AbstractSocket.  Wow.
 abstract class AbstractClientSocket(hostname: String, port: Int) {
   val socket = makeSocket(new Socket(hostname, port))
+  type T = socket.T
 
-  def send(data: socket.T): Unit = {
+  def send(data: T): Unit = {
     socket.send(data)
   }
 
-  def receive: socket.T = {
+  def receive: T = {
     socket.receive
   }
 

@@ -1,7 +1,7 @@
 package com.kolesky.sockets
 
 import java.io._
-import java.net._
+import java.net.ServerSocket
 
 class EchoServer(port: Int) {
   def run: Unit = {
@@ -46,13 +46,13 @@ object EchoServer {
 
 class EchoClient(hostname: String, port: Int) {
   def run: Unit = {
-    val socket = new StringSocket(new Socket(hostname, port), '\n'.asInstanceOf[Byte])
+    val socket = new StringClientSocket(hostname, port, 0x0)
     while (true) {
       printf("> ")
       val echo = readLine
       printf("[C] read from line '%s'%n", echo)
 
-      socket.send(echo)
+      socket.send(echo.asInstanceOf[socket.T])
       printf("[C] ECHO: %s%n", socket.receive)
     }
     socket.close
@@ -60,11 +60,11 @@ class EchoClient(hostname: String, port: Int) {
 
   // Really just meant to run some tests
   def runOnce(msg: String): String = {
-    val socket = new StringSocket(new Socket(hostname, port), 0x0)
-    socket.send(msg)
+    val socket = new StringClientSocket(hostname, port, 0x0)
+    socket.send(msg.asInstanceOf[socket.T])
     val response = socket.receive
     socket.close
-    response
+    response.asInstanceOf[String]
   }
 }
 
