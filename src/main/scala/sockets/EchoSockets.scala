@@ -19,15 +19,15 @@ class EchoServer(port: Int) {
         do {
           read = input.read(buffer)
           if (read > 0) {
-            printf("read %d bytes: '%s'%n", read, new String(buffer))
+            printf("[S] read %d bytes: '%s'%n", read, new String(buffer))
             contents.write(buffer, 0, read)
-            printf("writing '%s'%n", new String(buffer))
+            printf("[S] writing '%s'%n", new String(buffer))
             output.write(buffer, 0, read)
             output.flush
           }
         } while (read > 0 && read >= buffer.size)
         contents.close
-        printf("read in total '%s'%n", contents.toString)
+        printf("[S] read in total '%s'%n", contents.toString)
         if (read <= 0) { run = false }
       }
 
@@ -50,12 +50,21 @@ class EchoClient(hostname: String, port: Int) {
     while (true) {
       printf("> ")
       val echo = readLine
-      printf("read from line '%s'%n", echo)
+      printf("[C] read from line '%s'%n", echo)
 
       socket.send(echo)
-      printf("ECHO: %s%n", socket.receive)
+      printf("[C] ECHO: %s%n", socket.receive)
     }
     socket.close
+  }
+
+  // Really just meant to run some tests
+  def runOnce(msg: String): String = {
+    val socket = new StringSocket(hostname, port, 0x0)
+    socket.send(msg)
+    val response = socket.receive
+    socket.close
+    response
   }
 }
 
