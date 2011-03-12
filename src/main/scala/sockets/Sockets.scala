@@ -4,10 +4,9 @@ import java.io._
 import java.net.Socket
 
 // LERNIN: I would have liked msgDelimiter to be of type T, but it results in a compilation error when declared that way
-abstract class AbstractSocket(hostname: String, port: Int, msgDelimiter: Byte) {
+abstract class AbstractSocket(socket: Socket, msgDelimiter: Byte) {
   type T
 
-  val socket = new Socket(hostname, port)
   val output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream))
   val input = new DataInputStream(new BufferedInputStream(socket.getInputStream))
 
@@ -46,14 +45,14 @@ abstract class AbstractSocket(hostname: String, port: Int, msgDelimiter: Byte) {
   protected[this] def toBytes(data: T): Array[Byte]
 }
 
-class SimpleSocket(hostname: String, port: Int, msgDelimiter: Byte) extends AbstractSocket(hostname, port, msgDelimiter) {
+class SimpleSocket(socket: Socket, msgDelimiter: Byte) extends AbstractSocket(socket, msgDelimiter) {
   type T = Array[Byte]
 
   override def fromBytes(data: Array[Byte]): Array[Byte] = data
   override def toBytes(data: Array[Byte]): Array[Byte] = data
 }
 
-class StringSocket(hostname: String, port: Int, msgDelimiter: Byte) extends AbstractSocket(hostname, port, msgDelimiter) {
+class StringSocket(socket: Socket, msgDelimiter: Byte) extends AbstractSocket(socket, msgDelimiter) {
   type T = String
 
   override def fromBytes(data: Array[Byte]): String = new String(data, "UTF-8")

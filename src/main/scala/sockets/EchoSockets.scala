@@ -46,7 +46,7 @@ object EchoServer {
 
 class EchoClient(hostname: String, port: Int) {
   def run: Unit = {
-    val socket = new StringSocket(hostname, port, '\n'.asInstanceOf[Byte])
+    val socket = new StringSocket(new Socket(hostname, port), '\n'.asInstanceOf[Byte])
     while (true) {
       printf("> ")
       val echo = readLine
@@ -60,7 +60,7 @@ class EchoClient(hostname: String, port: Int) {
 
   // Really just meant to run some tests
   def runOnce(msg: String): String = {
-    val socket = new StringSocket(hostname, port, 0x0)
+    val socket = new StringSocket(new Socket(hostname, port), 0x0)
     socket.send(msg)
     val response = socket.receive
     socket.close
